@@ -6,7 +6,7 @@ Dated  : 2/3/2024
 ---
 
 ***
-##What is SongPlaylist?
+## What is SongPlaylist?
 
 This short project is a c99 based program to play songs stored locally.
 The project is meant to demonstrate an application of linked lists(circular linked lists) in real time.
