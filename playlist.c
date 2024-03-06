@@ -1,13 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
+#include<SDL2/SDL.h>
+#include<SDL2/SDL_mixer.h>
 
 struct SongNode{	
 	char SongName[100];
 	struct SongNode *NextSong;
 };
 
+int songplayer(char *);
 int menu();
 int queue(int , struct SongNode *);
 int addsong(int, struct SongNode *);
@@ -61,8 +63,10 @@ int main() {
 	}
 	//end of linking of the songs
 
-
-	menu(n, playlist);
+	for (int i = 0; i < n; i++){
+		songplayer(playlist[i].NextSong->SongName);
+	}
+	//menu(n, playlist);
 
 
 
@@ -157,6 +161,26 @@ int removesong(int n, struct SongNode * playlist){
 	return 1;
 }	
 
+
+int songplayer(char * SongName){
+
+
+	SDL_Init(SDL_INIT_AUDIO);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	Mix_Music * music = Mix_LoadMUS(SongName);
+	Mix_PlayMusic(music, 1);
+
+	while (Mix_PlayingMusic()){
+		SDL_Delay(100);
+	}
+
+	Mix_FreeMusic(music);
+	Mix_CloseAudio();
+	SDL_Quit();
+
+	return 0;
+}
 
 
 
