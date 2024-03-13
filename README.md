@@ -54,7 +54,7 @@ gcc -o Playlist playlist.c -lSDL2 -lSDL2_mixer
 
 ```
 
-this creates a executable file called Playlist which can be used to run the code.
+this creates a executable file called  ` Playlist ` which can be used to run the code.
 
 
 
