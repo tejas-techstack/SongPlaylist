@@ -4,16 +4,23 @@
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_mixer.h>
 
+
+
 struct SongNode{	
 	char SongName[100];
 	struct SongNode *NextSong;
 };
 
-int songplayer(char *);
+struct SongNode * playlist;
+int n;
+
+struct SongNode createplaylist();
 int menu();
-int queue(int , struct SongNode *);
-int addsong(int, struct SongNode *);
-int removesong(int,struct SongNode *);
+int queue(struct SongNode *);
+int addsong(struct SongNode *);
+int removesong(struct SongNode *);
+int playsongs(struct SongNode *);
+int songplayer(char *);
 //int nextsong(int, struct SongNode *);
 //int prevsong(int, struct SongNode *);
 
@@ -21,14 +28,29 @@ int removesong(int,struct SongNode *);
 
 int main() {
 	//song playlist using linked lists
-	
+	int n = 0;
+
 	printf("-------------------------------------\n");
 	printf("Hello, Welcome to playlist creation\n");
 	printf("-------------------------------------\n\n");
+	
+	printf("Press any key to continue....");
+	getchar();
+
+	createplaylist();
+
+	//printf("%s", playlist[0].NextSong->SongName);
+
+	menu(playlist);
+
+	return 0;
+}
+
+struct SongNode createplaylist(){
+	
 
 
-	int n;
-	printf("Enter number of songs:");
+	printf("Enter number of songs to add to the playlist:");
 	scanf("%d",&n);
 	if (n > 50) {
 		printf("Please create smaller playlist\n");
@@ -36,8 +58,8 @@ int main() {
 	}
 	getchar();
 	n++;
-
-	struct SongNode *playlist = (struct SongNode *) malloc(n*sizeof(struct SongNode));
+	
+	playlist = (struct SongNode *) malloc(n*sizeof(struct SongNode));
 	
 	
 
@@ -61,20 +83,17 @@ int main() {
 		printf("Enter song %d:", i);
 		scanf("%[^\n]%*c", playlist[i].SongName);
 	}
-	//end of linking of the songs
-
-	for (int i = 0; i < n; i++){
-		songplayer(playlist[i].NextSong->SongName);
-	}
-	//menu(n, playlist);
+	
 
 
-
-	//END OF MAIN
-	return 0;
+	return * playlist;
 }
 
-int menu(int n, struct SongNode * playlist) {
+
+
+
+
+int menu(struct SongNode * playlist) {
 
 	char ch;
 
@@ -85,11 +104,16 @@ int menu(int n, struct SongNode * playlist) {
 
 	switch(ch){
 
-	case 'q' : queue(n, playlist);break;
-	case 'a' : addsong(n, playlist); break;
-	case 'r' : removesong(n,playlist); break;
-	case 'e' : break;
-	default: menu(n, playlist);
+	case 'q' : queue(playlist);break;
+	case 'a' : addsong(playlist); break;
+	case 'r' : removesong(playlist); break;
+	case 'p' : {	
+			   printf("Playing Songs\n");
+			   playsongs(playlist); 
+			   break;
+		   }
+	case 'e' : printf("Exiting SongPlayer\n"); break;
+	default: menu(playlist);
 	}
 
 	return 0;
@@ -97,7 +121,7 @@ int menu(int n, struct SongNode * playlist) {
 
 
 
-int queue(int n,struct SongNode * playlist){
+int queue(struct SongNode * playlist){
 	printf("\n---Current Queue---\n");
 
 
@@ -116,14 +140,14 @@ int queue(int n,struct SongNode * playlist){
 		i++;
 	}
 	
-	menu(n, playlist);
+	menu(playlist);
 
 
 	//END OF QUEUE
 	return 1;
 }
 
-int addsong(int n, struct SongNode * playlist){
+int addsong(struct SongNode * playlist){
 	//printf("In addsong");
 
 	playlist = (struct SongNode *) realloc(playlist, n*sizeof(struct SongNode)+sizeof(struct SongNode));
@@ -135,11 +159,11 @@ int addsong(int n, struct SongNode * playlist){
 	printf("Enter the song you want to add to the queue:");
 	scanf("%[^\n]", playlist[n-2].NextSong->SongName);
 
-	menu(n, playlist);
+	menu(playlist);
  	return 1;
 }	
 
-int removesong(int n, struct SongNode * playlist){
+int removesong(struct SongNode * playlist){
 	int x = 0;
 
 	printf("\nWhich song do you want to remove:");
@@ -156,10 +180,20 @@ int removesong(int n, struct SongNode * playlist){
 		playlist[x-1].NextSong = NULL;
 	}else return 0;
  	
-	menu(n, playlist);
+	menu(playlist);
 	
 	return 1;
-}	
+}
+
+int playsongs(struct SongNode * playlist){
+
+	for (int i = 0; i < n; i++){
+		printf("helo");
+		songplayer(playlist[i].NextSong->SongName);
+	}
+
+	return 0;
+}
 
 
 int songplayer(char * SongName){
