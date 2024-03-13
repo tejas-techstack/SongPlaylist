@@ -19,8 +19,8 @@ On code run, the user can add songs to the playlist and then these songs are pla
 
 Current:
 1. Creating a playlist, from existing local songs.
-2. Adding a new song to the end of the queue.(Not in use in the current version)
-3. Removing any song based on the song number.(Not in use in the current version)
+2. Adding a new song to the end of the queue.
+3. Removing any song based on the song number.
 4. Play Songs using SDL2, SDL\_mixer.
 
 Upcoming:
