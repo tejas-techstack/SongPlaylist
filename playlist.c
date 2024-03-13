@@ -1,3 +1,13 @@
+/*
+	
+	project name: SongPlaylist
+	Author: Tejas R
+	dated : 13/03/2024
+	current version: 2
+
+*/
+
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -5,7 +15,7 @@
 #include<SDL2/SDL_mixer.h>
 
 
-
+//create a linked list
 struct SongNode{	
 	char SongName[100];
 	struct SongNode *NextSong;
@@ -14,7 +24,7 @@ struct SongNode{
 struct SongNode * playlist;
 int n;
 
-struct SongNode createplaylist();
+int createplaylist();
 int menu();
 int queue(struct SongNode *);
 int addsong(struct SongNode *);
@@ -27,8 +37,7 @@ int songplayer(char *);
 
 
 int main() {
-	//song playlist using linked lists
-	int n = 0;
+	// song playlist using linked lists
 
 	printf("-------------------------------------\n");
 	printf("Hello, Welcome to playlist creation\n");
@@ -37,19 +46,17 @@ int main() {
 	printf("Press any key to continue....");
 	getchar();
 
-	createplaylist();
+	createplaylist(); // begin creation of playlist
 
-	//printf("%s", playlist[0].NextSong->SongName);
-
-	menu(playlist);
+	menu(playlist); // once playlist has been created go to menu.
 
 	return 0;
 }
 
-struct SongNode createplaylist(){
+
+//function to create the playlist.
+int createplaylist(){
 	
-
-
 	printf("Enter number of songs to add to the playlist:");
 	scanf("%d",&n);
 	if (n > 50) {
@@ -59,6 +66,9 @@ struct SongNode createplaylist(){
 	getchar();
 	n++;
 	
+
+	// n*(size of SongNode) represents n spaces with each space representing 1 Song
+	// allocate memory and return that pointer address to playlist.
 	playlist = (struct SongNode *) malloc(n*sizeof(struct SongNode));
 	
 	
@@ -68,7 +78,8 @@ struct SongNode createplaylist(){
 		exit(1);
 	}
 
-
+	//link the Nodes To each other and then link the last node to the first node
+	//this creates a circular linked list
 	for (int i = 0 ; i <= n-1; i++){
 		if (i < n-1){
 			playlist[i].NextSong = &playlist[i+1];
@@ -77,8 +88,10 @@ struct SongNode createplaylist(){
 		}
 	}
 
+	//initiate the head node with null value
 	strcpy(playlist[0].SongName,"\0");
 
+	//assign values to each node
 	for (int i = 1; i < n; i++){
 		printf("Enter song %d:", i);
 		scanf("%[^\n]%*c", playlist[i].SongName);
@@ -86,16 +99,20 @@ struct SongNode createplaylist(){
 	
 
 
-	return * playlist;
+	return 0;
 }
 
 
-
-
-
+// function to access the menu and edit the queue
 int menu(struct SongNode * playlist) {
 
 	char ch;
+
+	printf("------\n");
+	printf(" MENU\n");
+	printf("------\n");
+
+	printf("\n   1. Show Queue(q)\n   2. Add Song(a)\n   3. Remove Song(r)\n   4. Play Song(p)\n   5. Exit(e)\n");
 
 	printf("\n");
 	printf("Enter Choice:");	
@@ -126,7 +143,7 @@ int queue(struct SongNode * playlist){
 
 
 	int i = 0;
-	int SongNumber = 1;
+	int SongNumber = 1; //temporary variable to track number of songs
 
 
 	while (i < n-1) {
@@ -147,9 +164,12 @@ int queue(struct SongNode * playlist){
 	return 1;
 }
 
+
+// function to add song
 int addsong(struct SongNode * playlist){
 	//printf("In addsong");
 
+	//re-allocate memory with storage for one extra node
 	playlist = (struct SongNode *) realloc(playlist, n*sizeof(struct SongNode)+sizeof(struct SongNode));
 	n++;
 
@@ -163,6 +183,7 @@ int addsong(struct SongNode * playlist){
  	return 1;
 }	
 
+// function to remove song
 int removesong(struct SongNode * playlist){
 	int x = 0;
 
@@ -185,33 +206,34 @@ int removesong(struct SongNode * playlist){
 	return 1;
 }
 
+// play song using for loop
 int playsongs(struct SongNode * playlist){
 
 	for (int i = 0; i < n; i++){
-		printf("helo");
 		songplayer(playlist[i].NextSong->SongName);
 	}
 
 	return 0;
 }
 
-
+// function to play song using sdl
 int songplayer(char * SongName){
 
 
-	SDL_Init(SDL_INIT_AUDIO);
-	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+	SDL_Init(SDL_INIT_AUDIO);                           // initiate sdl
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);  // initiate mixer
 
-	Mix_Music * music = Mix_LoadMUS(SongName);
-	Mix_PlayMusic(music, 1);
+	Mix_Music * music = Mix_LoadMUS(SongName);          // create a music entity
+
+	Mix_PlayMusic(music, 1);			    // play the music file
 
 	while (Mix_PlayingMusic()){
 		SDL_Delay(100);
 	}
 
-	Mix_FreeMusic(music);
-	Mix_CloseAudio();
-	SDL_Quit();
+	Mix_FreeMusic(music);                               // free memory
+	Mix_CloseAudio();                                   // close audio playback
+	SDL_Quit();					    // quit sdl
 
 	return 0;
 }
