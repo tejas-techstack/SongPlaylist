@@ -28,4 +28,42 @@ Upcoming:
 2. Adding a song anywhere in the queue.
 3. Removing song based on song name.
 
+## How to use:
+
+The use of this program requires gcc compiler to be installed.
+
+The program requires the following packages to be installed.
+
+Linux:
+'''
+
+sudo apt-get update
+sudo apt-get install libsdl2-dev
+sudo apt-get install libsdl2-mixer-dev
+
+'''
+
+Windows:
+
+
+To run the code, compile it as such:
+
+'''
+
+gcc -o Playlist playlist.c -lSDL2 -lSDL2_mixer
+
+'''
+
+this creates a executable file called Playlist which can be used to run the code.
+
+
+
+
+
+
+
+
+
+
+
 
